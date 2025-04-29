@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Creator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg" style="background-color: #343a40; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)">
+        <div class="container-fluid">
+            <a class="navbar-brand text-light fw-bold" href="#">Quiz Creator</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active text-light" href="/admin_dash">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="#">Summary</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger fw-bold" href="/login">Logout</a></li>
+                </ul>
+
+                <!-- Search Box -->
+                <form class="d-flex" method="GET" action="/quiz_creator">
+                    <input class="form-control me-2" name="chap_name" type="search" placeholder="Search by Chapter..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+
+                <!-- Welcome Message -->
+                <span class="navbar-text ms-3 text-light">
+                    Welcome, {{ this_user.username }}!
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Add Quiz Button -->
+        <a href="/add_quiz" class="btn btn-primary mb-3">Add Quiz</a>
+
+        <p class="text-center mb-4 fs-2 fw-bold">Created Quizzes</p>
+
+        <div class="row">
+            {% for quiz in quizzes %}
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card border shadow-sm p-3 rounded-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Quiz on {{ quiz.chapter.name }}</h5>
+                            <div>
+                                <a href="/edit_quiz/{{ quiz.id }}" class="btn btn-warning btn-sm px-3">Edit Quiz</a>
+                                <a href="/delete_quiz/{{ quiz.id }}" class="btn btn-danger btn-sm px-3"
+                                    onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</a>
+                            </div>
+                        </div>
+                        <p><strong>Date:</strong> {{ quiz.date_of_quiz }}</p>
+                        <p><strong>Duration:</strong> {{ quiz.time_duration }}</p>
+                        <p><strong>Remarks:</strong> {{ quiz.remarks }}</p>
+                        <p><strong>Number of Questions:</strong> {{ quiz.questions|length }}</p>
+
+                        <div class="d-flex justify-content-center gap-4 flex-wrap">
+                            <a href="/add_question/{{ quiz.chapter_id }}/{{ quiz.id }}" class="btn btn-success btn-sm px-3">Add Question</a>
+                            <a href="/manage_questions/{{ quiz.id }}/edit" class="btn btn-info btn-sm px-3">Edit Questions</a>
+                            <a href="/manage_questions/{{ quiz.id }}/delete" class="btn btn-danger btn-sm px-3">Delete Questions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+
+</html>
